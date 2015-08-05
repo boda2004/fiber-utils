@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "fibers": "^1.0.6",
-    "underscore": "~1.8.3"
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "jest-cli": "^0.4.17"
