@@ -225,6 +225,9 @@ describe('fiber-utils', function () {
 
     it('makes the async version available', function () {
       var myFunc = myObject.myFunc;
+      myFunc.bind = function () {
+        return myFunc;
+      }
 
       var myObjectWrapper = fiberUtils.wrapAsyncObject(myObject, ['myFunc'], {
         wrapAsync: wrapAsync
@@ -237,6 +240,9 @@ describe('fiber-utils', function () {
     describe('when the object already has a function with the same name', function () {
       it('uses an unused name', function () {
         var myFunc = myObject.myFunc;
+        myFunc.bind = function () {
+          return myFunc;
+        }
         var existingFunc = function () {};
         myObject.myFuncAsync = existingFunc;
         myObject.myFuncSync = existingFunc;

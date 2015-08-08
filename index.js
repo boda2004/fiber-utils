@@ -68,7 +68,7 @@ exports.wrapAsyncObject = function (object, properties, options) {
       if (properties.indexOf(asyncMethodName) !== -1) {
         asyncMethodName += '2';
       }
-      wrapper[asyncMethodName] = asyncMethod;
+      wrapper[asyncMethodName] = asyncMethod.bind(object);
 
       var syncMethodName = propertyName + 'Sync';
       if (properties.indexOf(syncMethodName) !== -1) {
