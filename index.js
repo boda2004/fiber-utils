@@ -59,8 +59,19 @@ exports.wrapAsyncObject = function (object, properties, options) {
     var asyncMethod = object[propertyName];
     if (_.isFunction(asyncMethod)) {
       var syncMethod = wrapAsync(asyncMethod, object);
-      object[propertyName + 'Async'] = asyncMethod;
-      object[propertyName + 'Sync'] = syncMethod;
+
+      var asyncMethodName = propertyName + 'Async';
+      if (object[asyncMethodName]) {
+        asyncMethodName += '2';
+      }
+      object[asyncMethodName] = asyncMethod;
+
+      var syncMethodName = propertyName + 'Sync';
+      if (object[syncMethodName]) {
+        syncMethodName += '2';
+      }
+      object[syncMethodName] = syncMethod;
+
       if (syncByDefault) {
         object[propertyName] = syncMethod;
       }

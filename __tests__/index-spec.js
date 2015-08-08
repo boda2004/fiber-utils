@@ -234,6 +234,25 @@ describe('fiber-utils', function () {
       expect(myObject.myFuncAsync).toBe(myFunc);
     })
 
+    describe('when the object already has a function with the same name', function () {
+      it('uses an unused name', function () {
+        var myFunc = myObject.myFunc;
+        var existingFunc = function () {};
+        myObject.myFuncAsync = existingFunc;
+        myObject.myFuncSync = existingFunc;
+
+        fiberUtils.wrapAsyncObject(myObject, ['myFunc'], {
+          wrapAsync: wrapAsync
+        });
+
+        expect(myObject.myFuncAsync).toBe(existingFunc);
+        expect(myObject.myFuncSync).toBe(existingFunc);
+        expect(myObject.myFuncAsync2).toBe(myFunc);
+        expect(myObject.myFuncSync2).toBeDefined();
+        expect(myObject.myFuncSync2.isWrapped).toBe(true);
+      });
+    });
+
     describe('options', function () {
       it('"syncByDefault: false" makes the default function async', function () {
         var myFunc = myObject.myFunc;
