@@ -55,26 +55,30 @@ exports.wrapAsyncObject = function (object, properties, options) {
   var syncByDefault = options.syncByDefault !== false;
   var wrapAsync = options.wrapAsync || exports.wrapAsync;
 
+  var wrapper = {
+    _original: object
+  };
+
   _.forEach(properties, function (propertyName) {
     var asyncMethod = object[propertyName];
     if (_.isFunction(asyncMethod)) {
       var syncMethod = wrapAsync(asyncMethod, object);
 
       var asyncMethodName = propertyName + 'Async';
-      if (object[asyncMethodName]) {
+      if (properties.indexOf(asyncMethodName) !== -1) {
         asyncMethodName += '2';
       }
-      object[asyncMethodName] = asyncMethod;
+      wrapper[asyncMethodName] = asyncMethod;
 
       var syncMethodName = propertyName + 'Sync';
-      if (object[syncMethodName]) {
+      if (properties.indexOf(syncMethodName) !== -1) {
         syncMethodName += '2';
       }
-      object[syncMethodName] = syncMethod;
+      wrapper[syncMethodName] = syncMethod;
 
-      if (syncByDefault) {
-        object[propertyName] = syncMethod;
-      }
+      wrapper[propertyName] = syncByDefault ? syncMethod : asyncMethod;
     }
   });
+
+  return wrapper;
 };

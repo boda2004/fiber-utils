@@ -213,25 +213,25 @@ describe('fiber-utils', function () {
 
 
     it('creates a sync version', function () {
-      fiberUtils.wrapAsyncObject(myObject, ['myFunc'], {
+      var myObjectWrapper = fiberUtils.wrapAsyncObject(myObject, ['myFunc'], {
         wrapAsync: wrapAsync
       });
 
-      expect(myObject.myFunc).toBeDefined();
-      expect(myObject.myFunc.isWrapped).toBe(true);
-      expect(myObject.myFuncSync).toBeDefined();
-      expect(myObject.myFuncSync.isWrapped).toBe(true);
+      expect(myObjectWrapper.myFunc).toBeDefined();
+      expect(myObjectWrapper.myFunc.isWrapped).toBe(true);
+      expect(myObjectWrapper.myFuncSync).toBeDefined();
+      expect(myObjectWrapper.myFuncSync.isWrapped).toBe(true);
     })
 
     it('makes the async version available', function () {
       var myFunc = myObject.myFunc;
 
-      fiberUtils.wrapAsyncObject(myObject, ['myFunc'], {
+      var myObjectWrapper = fiberUtils.wrapAsyncObject(myObject, ['myFunc'], {
         wrapAsync: wrapAsync
       });
 
-      expect(myObject.myFuncAsync).toBeDefined();
-      expect(myObject.myFuncAsync).toBe(myFunc);
+      expect(myObjectWrapper.myFuncAsync).toBeDefined();
+      expect(myObjectWrapper.myFuncAsync).toBe(myFunc);
     })
 
     describe('when the object already has a function with the same name', function () {
@@ -241,15 +241,18 @@ describe('fiber-utils', function () {
         myObject.myFuncAsync = existingFunc;
         myObject.myFuncSync = existingFunc;
 
-        fiberUtils.wrapAsyncObject(myObject, ['myFunc'], {
-          wrapAsync: wrapAsync
-        });
+        var myObjectWrapper = fiberUtils.wrapAsyncObject(
+          myObject,
+          ['myFunc', 'myFuncAsync', 'myFuncSync'],
+          {wrapAsync: wrapAsync}
+        );
 
-        expect(myObject.myFuncAsync).toBe(existingFunc);
-        expect(myObject.myFuncSync).toBe(existingFunc);
-        expect(myObject.myFuncAsync2).toBe(myFunc);
-        expect(myObject.myFuncSync2).toBeDefined();
-        expect(myObject.myFuncSync2.isWrapped).toBe(true);
+        expect(myObjectWrapper.myFuncAsync.fn).toBe(existingFunc);
+        expect(myObjectWrapper.myFuncSync.fn).toBe(existingFunc);
+        expect(myObjectWrapper.myFuncAsync2).toBe(myFunc);
+        expect(myObjectWrapper.myFuncSync2).toBeDefined();
+        expect(myObjectWrapper.myFuncSync2.isWrapped).toBe(true);
+        expect(myObjectWrapper.myFuncSync2.fn).toBe(myFunc);
       });
     });
 
@@ -257,13 +260,13 @@ describe('fiber-utils', function () {
       it('"syncByDefault: false" makes the default function async', function () {
         var myFunc = myObject.myFunc;
 
-        fiberUtils.wrapAsyncObject(myObject, ['myFunc'], {
+        var myObjectWrapper = fiberUtils.wrapAsyncObject(myObject, ['myFunc'], {
           wrapAsync: wrapAsync,
           syncByDefault: false
         });
 
-        expect(myObject.myFunc).toBeDefined();
-        expect(myObject.myFunc).toBe(myFunc);
+        expect(myObjectWrapper.myFunc).toBeDefined();
+        expect(myObjectWrapper.myFunc).toBe(myFunc);
       })
     })
   })
