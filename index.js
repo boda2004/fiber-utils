@@ -61,6 +61,7 @@ exports.wrapAsyncObject = function (object, properties, options) {
 
   _.forEach(properties, function (propertyName) {
     var asyncMethod = object[propertyName];
+    var boundAsyncMethod = asyncMethod.bind(object);
     if (_.isFunction(asyncMethod)) {
       var syncMethod = wrapAsync(asyncMethod, object);
 
@@ -68,7 +69,7 @@ exports.wrapAsyncObject = function (object, properties, options) {
       if (properties.indexOf(asyncMethodName) !== -1) {
         asyncMethodName += '2';
       }
-      wrapper[asyncMethodName] = asyncMethod.bind(object);
+      wrapper[asyncMethodName] = boundAsyncMethod;
 
       var syncMethodName = propertyName + 'Sync';
       if (properties.indexOf(syncMethodName) !== -1) {
@@ -76,7 +77,7 @@ exports.wrapAsyncObject = function (object, properties, options) {
       }
       wrapper[syncMethodName] = syncMethod;
 
-      wrapper[propertyName] = syncByDefault ? syncMethod : asyncMethod;
+      wrapper[propertyName] = syncByDefault ? syncMethod : boundAsyncMethod;
     }
   });
 

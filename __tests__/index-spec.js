@@ -265,6 +265,9 @@ describe('fiber-utils', function () {
     describe('options', function () {
       it('"syncByDefault: false" makes the default function async', function () {
         var myFunc = myObject.myFunc;
+        myFunc.bind = function () {
+          return myFunc;
+        }
 
         var myObjectWrapper = fiberUtils.wrapAsyncObject(myObject, ['myFunc'], {
           wrapAsync: wrapAsync,
