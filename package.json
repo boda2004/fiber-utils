@@ -1,6 +1,6 @@
 {
-  "name": "@xolvio/fiber-utils",
-  "version": "2.0.1",
+  "name": "xolvio-fiber-utils",
+  "version": "2.0.3",
   "description": "Fiber utilities to convert async functions to sync ones",
   "keywords": [
     "fibers",
@@ -28,7 +28,7 @@
     ]
   },
   "dependencies": {
-    "fibers": "^1.0.6",
+    "fibers": "^1.0.7",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
