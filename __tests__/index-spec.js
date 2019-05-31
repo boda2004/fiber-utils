@@ -4,6 +4,7 @@ describe('fiber-utils', function () {
   var fiberUtils = require('../index');
   var _ = require('underscore');
   jest.autoMockOn()
+  jest.useFakeTimers()
 
   describe('wrapAsync', function () {
     describe('wrapping a function with callback', function () {
